@@ -46,9 +46,13 @@
   </head>
   <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     <div id="root"></div>
-    <script type="text/babel">
+    <script type="text/babel" data-presets="env,react">
+      const React = window.React;
+      const ReactDOM = window.ReactDOM;
+      const ReactRouterDOM = window.ReactRouterDOM;
+      
       const { useState, useEffect } = React;
-      const { HashRouter as Router, Routes, Route, Link, useLocation } = ReactRouterDOM;
+      const { HashRouter: Router, Routes, Route, Link, useLocation } = ReactRouterDOM;
 
       // 模拟数据
       const posts = [
