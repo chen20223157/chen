@@ -21,9 +21,9 @@
         }
       }
     </script>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-router-dom@6.8.1/umd/react-router-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
       .gradient-bg {
@@ -50,6 +50,11 @@
       const React = window.React;
       const ReactDOM = window.ReactDOM;
       const ReactRouterDOM = window.ReactRouterDOM;
+      
+      // 检查依赖是否正确加载
+      if (!React || !ReactDOM || !ReactRouterDOM) {
+        console.error('依赖加载失败:', { React, ReactDOM, ReactRouterDOM });
+      }
       
       const { useState, useEffect } = React;
       const { HashRouter: Router, Routes, Route, Link, useLocation } = ReactRouterDOM;
