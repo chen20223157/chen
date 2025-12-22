@@ -262,8 +262,7 @@
           id: 1,
           title: "Windows音视频采集技术详解：DirectSound vs WaveOut vs WASAPI",
           excerpt: "深度解析Windows平台三大音频API的技术差异、适用场景及测试要点，涵盖DirectSound硬件加速、WaveOut兼容性、WASAPI低延迟等核心特性。",
-          content: `
-# Windows音视频采集技术详解
+          content: `# Windows音视频采集技术详解
 
 ## 核心API对比
 
@@ -297,18 +296,50 @@
 - **优先选择WASAPI**：对于需要低延迟的现代应用
 - **DirectSound作为备选**：当需要硬件加速或兼容旧系统时
 - **WaveOut用于简单场景**：基本播放功能，快速实现
-          `,
+
+## 代码示例
+
+### WASAPI音频初始化
+\`\`\`cpp
+#include <audioclient.h>
+#include <mmdeviceapi.h>
+
+// 初始化WASAPI
+IMMDeviceEnumerator *pEnumerator = NULL;
+IMMDevice *pDevice = NULL;
+IAudioClient *pAudioClient = NULL;
+
+CoInitialize(NULL);
+CoCreateInstance(
+    __uuidof(MMDeviceEnumerator), NULL, 
+    CLSCTX_ALL, __uuidof(IMMDeviceEnumerator),
+    (void**)&pEnumerator
+);
+\`\`\`
+
+### 性能测试代码
+\`\`\`cpp
+// 测量音频延迟
+LARGE_INTEGER start, end, freq;
+QueryPerformanceFrequency(&freq);
+QueryPerformanceCounter(&start);
+
+// 播放音频
+PlayAudioBuffer();
+
+QueryPerformanceCounter(&end);
+double latency = (double)(end.QuadPart - start.QuadPart) / freq.QuadPart * 1000;
+\`\`\``,
           date: "2025-12-22",
           tags: ["音频处理", "Windows", "API", "测试技术"],
           author: "技术博主",
           readTime: "8分钟"
         },
-        {
-          id: 2,
-          title: "Android音频采集：OpenSLES vs AudioRecord深度对比分析",
-          excerpt: "全面对比Android平台两大音频采集方案，从性能、兼容性、开发复杂度等维度分析OpenSLES和AudioRecord的优劣，助你选择合适的音频采集方案。",
-          content: `
-# Android音频采集技术对比
+          {
+            id: 2,
+            title: "Android音频采集：OpenSLES vs AudioRecord深度对比分析",
+            excerpt: "全面对比Android平台两大音频采集方案，从性能、兼容性、开发复杂度等维度分析OpenSLES和AudioRecord的优劣，助你选择合适的音频采集方案。",
+            content: `# Android音频采集技术对比
 
 ## OpenSLES详解
 
@@ -324,6 +355,18 @@
 SLresult result = slCreateEngine(&engineObject, 0, NULL, 0, NULL, NULL);
 result = (*engineObject)->Realize(engineObject, SL_BOOLEAN_FALSE);
 result = (*engineObject)->GetInterface(engineObject, SL_IID_ENGINE, &engine);
+
+// 创建音频录制器
+SLDataLocator_IODevice loc_dev = {SL_DATALOCATOR_IODEVICE, SL_IODEVICE_AUDIOINPUT, SL_DEFAULTDEVICEID_AUDIOINPUT, NULL};
+SLDataSource audioSrc = {&loc_dev, NULL};
+
+SLDataLocator_AndroidSimpleBufferQueue loc_bq = {SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2};
+SLDataFormat_PCM format_pcm = {
+    SL_DATAFORMAT_PCM, 1, SL_SAMPLINGRATE_44_1,
+    SL_PCMSAMPLEFORMAT_FIXED_16, SL_PCMSAMPLEFORMAT_FIXED_16,
+    SL_SPEAKER_FRONT_CENTER, SL_BYTEORDER_LITTLEENDIAN
+};
+SLDataSink audioSnk = {&loc_bq, &format_pcm};
 \`\`\`
 
 ### 适用场景
@@ -343,13 +386,23 @@ result = (*engineObject)->GetInterface(engineObject, SL_IID_ENGINE, &engine);
 ### 开发要点
 \`\`\`java
 // AudioRecord初始化
+int sampleRate = 44100;
+int channelConfig = AudioFormat.CHANNEL_IN_MONO;
+int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
+int bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig, audioFormat);
+
 AudioRecord audioRecord = new AudioRecord(
     MediaRecorder.AudioSource.MIC,
     sampleRate,
-    AudioFormat.CHANNEL_IN_MONO,
-    AudioFormat.ENCODING_PCM_16BIT,
+    channelConfig,
+    audioFormat,
     bufferSize
 );
+
+// 开始录音
+audioRecord.startRecording();
+byte[] buffer = new byte[bufferSize];
+audioRecord.read(buffer, 0, bufferSize);
 \`\`\`
 
 ### 适用场景
@@ -378,18 +431,37 @@ AudioRecord audioRecord = new AudioRecord(
    - 普通录音功能
    - 快速开发需求
    - 对延迟要求不高的应用
-          `,
-          date: "2025-12-21",
-          tags: ["Android", "音频采集", "OpenSLES", "AudioRecord", "性能对比"],
-          author: "技术博主",
-          readTime: "10分钟"
-        },
-        {
-          id: 3,
-          title: "音视频硬解vs软解：技术原理、性能差异与测试验证",
-          excerpt: "深入解析音视频解码的两种核心技术方案，从硬件架构、性能表现、兼容性等角度全面对比硬解和软解，提供完整的测试验证方案。",
-          content: `
-# 音视频硬解vs软解技术全解析
+
+## 测试验证方案
+
+### 延迟测试
+\`\`\`java
+// 测量音频延迟
+long startTime = System.nanoTime();
+// 音频处理流程
+processAudio();
+long endTime = System.nanoTime();
+double latencyMs = (endTime - startTime) / 1_000_000.0;
+\`\`\`
+
+### 性能监控
+\`\`\`bash
+# 监控CPU使用率
+adb shell top -p [pid]
+
+# 监控内存占用
+adb shell dumpsys meminfo [package_name]
+\`\`\``,
+            date: "2025-12-21",
+            tags: ["Android", "音频采集", "OpenSLES", "AudioRecord", "性能对比"],
+            author: "技术博主",
+            readTime: "10分钟"
+          },
+          {
+            id: 3,
+            title: "音视频硬解vs软解：技术原理、性能差异与测试验证",
+            excerpt: "深入解析音视频解码的两种核心技术方案，从硬件架构、性能表现、兼容性等角度全面对比硬解和软解，提供完整的测试验证方案。",
+            content: `# 音视频硬解vs软解技术全解析
 
 ## 核心定义
 
@@ -459,12 +531,727 @@ ffprobe -show_frames -select_streams v:0 input.mp4
 2. **尝试硬解**：优先使用硬件解码
 3. **降级处理**：硬解失败时自动切换软解
 4. **动态调整**：根据播放状态动态选择解码方式
-          `,
-          date: "2025-12-20",
-          tags: ["音视频解码", "硬解", "软解", "性能测试", "兼容性"],
-          author: "技术博主",
-          readTime: "12分钟"
+
+## 代码实现示例
+
+### 硬解初始化（Android）
+\`\`\`java
+// 创建MediaCodec硬解器
+MediaCodec codec = MediaCodec.createDecoderByType(MediaFormat.MIMETYPE_VIDEO_AVC);
+MediaFormat format = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, width, height);
+format.setInteger(MediaFormat.KEY_BIT_RATE, bitRate);
+format.setInteger(MediaFormat.KEY_FRAME_RATE, frameRate);
+codec.configure(format, surface, null, 0);
+codec.start();
+\`\`\`
+
+### 软解初始化（FFmpeg）
+\`\`\`c
+// FFmpeg软解器初始化
+AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+AVCodecContext *codec_ctx = avcodec_alloc_context3(codec);
+avcodec_open2(codec_ctx, codec, NULL);
+
+// 解码循环
+while (av_read_frame(format_ctx, &packet) >= 0) {
+    int ret = avcodec_send_packet(codec_ctx, &packet);
+    if (ret < 0) break;
+    
+    while (ret >= 0) {
+        ret = avcodec_receive_frame(codec_ctx, frame);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) break;
+    }
+}
+\`\`\`
+
+## 性能优化建议
+
+1. **硬解优化**：
+   - 使用Surface直接渲染
+   - 启用硬件缓冲区复用
+   - 合理设置缓冲区大小
+
+2. **软解优化**：
+   - 使用多线程解码
+   - 启用SIMD指令集优化
+   - 优化内存拷贝操作
+
+3. **通用优化**：
+   - 实现智能降级机制
+   - 添加性能监控反馈
+   - 根据设备能力动态调整`,
+            date: "2025-12-20",
+            tags: ["音视频解码", "硬解", "软解", "性能测试", "兼容性"],
+            author: "技术博主",
+            readTime: "12分钟"
+          },
+          {
+            id: 4,
+            title: "Android AudioTrack JNI技术详解：Java与Native的桥梁",
+            excerpt: "深入解析Android AudioTrack的JNI实现机制，从Java层API调用到底层C++实现的完整数据流，掌握音频播放的核心技术原理。",
+            content: `# Android AudioTrack JNI技术详解
+
+## JNI桥梁作用
+
+JNI（Java Native Interface）是Java与C/C++之间的桥梁，让Java代码能够调用底层Native实现。
+
+### 核心架构
+```
+Java层 AudioTrack API
+        ↓
+JNI层 android_media_AudioTrack.cpp
+        ↓
+Native层 AudioTrack (C++)
+        ↓
+AudioFlinger (音频系统服务)
+```
+
+## Java层定义
+
+### AudioTrack.java 核心方法
+\`\`\`java
+public class AudioTrack {
+    // Java层方法声明
+    public void play() {
+        native_play(); // 调用native方法
+    }
+    
+    public int write(byte[] audioData, int offsetInBytes, int sizeInBytes) {
+        return native_write_byte(audioData, offsetInBytes, sizeInBytes, AUDIO_FORMAT_PCM_16BIT);
+    }
+    
+    public void stop() {
+        native_stop();
+    }
+    
+    public void release() {
+        native_release();
+    }
+    
+    // Native方法声明（没有实现体）
+    private native void native_play();
+    private native int native_write_byte(byte[] audioData, int offsetInBytes, int sizeInBytes, int format);
+    private native void native_stop();
+    private native void native_release();
+}
+\`\`\`
+
+## JNI层实现
+
+### frameworks/base/media/jni/android_media_AudioTrack.cpp
+
+#### play()方法的JNI实现
+\`\`\`cpp
+// JNI函数：对应Java的native_play()
+static void android_media_AudioTrack_play(JNIEnv *env, jobject thiz) {
+    // 从Java对象中获取Native对象指针
+    AudioTrack *lpTrack = getAudioTrack(env, thiz);
+    if (lpTrack == NULL) {
+        return;
+    }
+    
+    // 调用C++ AudioTrack的play方法
+    lpTrack->play();
+}
+\`\`\`
+
+#### write()方法的JNI实现
+\`\`\`cpp
+// JNI函数：对应Java的native_write_byte()
+static jint android_media_AudioTrack_write_byte(
+        JNIEnv *env, jobject thiz,
+        jbyteArray javaAudioData,
+        jint offsetInBytes, jint sizeInBytes,
+        jint javaAudioFormat) {
+    
+    // 1. 获取Java数组指针
+    jbyte* cAudioData = env->GetByteArrayElements(javaAudioData, NULL);
+    if (cAudioData == NULL) {
+        return 0; // OutOfMemoryError already thrown
+    }
+    
+    // 2. 获取Native AudioTrack对象
+    AudioTrack *lpTrack = getAudioTrack(env, thiz);
+    if (lpTrack == NULL) {
+        env->ReleaseByteArrayElements(javaAudioData, cAudioData, JNI_ABORT);
+        return 0;
+    }
+    
+    // 3. 调用底层write函数
+    ssize_t written = lpTrack->write(cAudioData + offsetInBytes, 
+                                     sizeInBytes, true);
+    
+    // 4. 释放Java数组
+    env->ReleaseByteArrayElements(javaAudioData, cAudioData, 0);
+    
+    return (jint)written;
+}
+\`\`\`
+
+## JNI方法注册
+
+### JNI Native方法注册表
+\`\`\`cpp
+static const JNINativeMethod gMethods[] = {
+    {"native_play", "()V", (void *)android_media_AudioTrack_play},
+    {"native_write_byte", "([BIII)I", 
+     (void *)android_media_AudioTrack_write_byte},
+    {"native_stop", "()V", (void *)android_media_AudioTrack_stop},
+    {"native_release", "()V", (void *)android_media_AudioTrack_release},
+    {"native_get_native_frame_count", "()I", 
+     (void *)android_media_AudioTrack_get_native_frame_count},
+    // ... 其他方法映射
+};
+
+// 注册函数
+int register_android_media_AudioTrack(JNIEnv *env) {
+    return AndroidRuntime::registerNativeMethods(env,
+            "android/media/AudioTrack", gMethods, NELEM(gMethods));
+}
+\`\`\`
+
+## 完整数据流过程
+
+### 1. 开发者调用
+\`\`\`java
+// 开发者代码
+AudioTrack audioTrack = new AudioTrack(
+    AudioManager.STREAM_MUSIC,
+    44100,
+    AudioFormat.CHANNEL_OUT_STEREO,
+    AudioFormat.ENCODING_PCM_16BIT,
+    bufferSize,
+    AudioTrack.MODE_STREAM
+);
+
+byte[] audioData = getAudioData();
+audioTrack.write(audioData, 0, audioData.length);
+audioTrack.play();
+\`\`\`
+
+### 2. JNI转换过程
+\`\`\`cpp
+// JNI层处理流程
+1. Java: audioTrack.write(audioData, 0, length)
+   ↓
+2. JNI: android_media_AudioTrack_write_byte()
+   - 获取Java数组指针
+   - 转换为C++ AudioTrack对象
+   - 调用Native write方法
+   ↓
+3. Native: AudioTrack::write()
+   - 音频数据处理
+   - 传递给AudioFlinger
+   ↓
+4. AudioFlinger: 音频混音和输出
+\`\`\`
+
+## 性能优化要点
+
+### 1. 内存管理
+\`\`\`cpp
+// 高效的数组操作
+jbyte* cAudioData = env->GetByteArrayElements(javaAudioData, NULL);
+// 使用JNI_ABORT模式避免不必要的回拷
+env->ReleaseByteArrayElements(javaAudioData, cAudioData, JNI_ABORT);
+\`\`\`
+
+### 2. 异常处理
+\`\`\`cpp
+// 完善的错误检查
+if (lpTrack == NULL) {
+    jniThrowException(env, "java/lang/IllegalStateException", 
+                      "AudioTrack not initialized");
+    return 0;
+}
+\`\`\`
+
+### 3. 线程安全
+\`\`\`cpp
+// 确保线程安全的对象访问
+AudioTrack *getAudioTrack(JNIEnv* env, jobject thiz) {
+    Mutex::Autolock _l(sLock);
+    return (AudioTrack*)env->GetLongField(thiz, fields.mNativeTrackInJavaObj);
+}
+\`\`\`
+
+## 调试和测试
+
+### JNI调试技巧
+\`\`\`cpp
+// 添加调试日志
+ALOGV("AudioTrack JNI: write %d bytes, format=%d", sizeInBytes, javaAudioFormat);
+
+// 性能监控
+nsecs_t startTime = systemTime();
+ssize_t result = lpTrack->write(cAudioData + offsetInBytes, sizeInBytes, true);
+nsecs_t endTime = systemTime();
+ALOGD("AudioTrack write took %lld ns", endTime - startTime);
+\`\`\`
+
+### 单元测试
+\`\`\`java
+// Java层测试
+@Test
+public void testAudioTrackPlayback() {
+    AudioTrack track = new AudioTrack(/* parameters */);
+    byte[] testData = generateTestTone();
+    int written = track.write(testData, 0, testData.length);
+    assertEquals(testData.length, written);
+    
+    track.play();
+    // 验证播放状态
+    assertTrue(track.getPlayState() == AudioTrack.PLAYSTATE_PLAYING);
+}
+\`\`\`
+
+## 常见问题和解决方案
+
+### 1. 内存泄漏
+- 确保Native对象正确释放
+- 及时释放JNI数组引用
+
+### 2. 性能瓶颈
+- 减少JNI调用频率
+- 优化内存拷贝操作
+- 使用直接缓冲区（DirectBuffer）
+
+### 3. 线程问题
+- 注意AudioTrack的线程模型
+- 避免在错误线程调用API
+
+通过深入理解AudioTrack的JNI实现，可以更好地优化音频播放性能，解决复杂的技术问题。`,
+            date: "2025-12-19",
+            tags: ["Android", "AudioTrack", "JNI", "音频播放", "Native开发"],
+            author: "技术博主",
+            readTime: "15分钟"
+          },
+          {
+            id: 5,
+            title: "播放器预加载与缓存策略：性能优化的核心关键技术",
+            excerpt: "深入解析播放器预加载机制、缓存策略设计，从seekbuffer到normalbuffer的完整缓冲体系，掌握提升播放性能的核心技术。",
+            content: `# 播放器预加载与缓存策略详解
+
+## 核心概念解析
+
+### 预加载（Preload）
+预加载是在用户实际播放前，提前下载和缓存媒体数据的技术，旨在减少播放启动延迟。
+
+### 缓存策略
+缓存策略决定了数据何时下载、存储多少、何时清理，直接影响播放流畅度和资源占用。
+
+## 缓冲区体系架构
+
+### 1. SeekBuffer（跳转缓冲）
+\`\`\`cpp
+class SeekBuffer {
+private:
+    std::vector<uint8_t> buffer_;
+    size_t seek_pos_;
+    bool is_seeking_;
+    
+public:
+    // 预加载seek位置附近的数据
+    void preloadSeekPosition(int64_t position) {
+        seek_pos_ = position;
+        // 预加载前后5秒数据
+        int64_t start_pos = std::max(0LL, position - 5 * 1000000);
+        int64_t end_pos = position + 5 * 1000000;
+        
+        preloadDataRange(start_pos, end_pos);
+    }
+    
+    // 处理seek请求
+    bool handleSeek(int64_t position) {
+        if (hasDataAt(position)) {
+            return true; // 缓冲区命中，立即响应
         }
+        return false; // 需要从网络加载
+    }
+};
+\`\`\`
+
+### 2. NormalBuffer（常规缓冲）
+\`\`\`cpp
+class NormalBuffer {
+private:
+    CircularBuffer circular_buffer_;
+    size_t buffer_size_;
+    BufferStrategy strategy_;
+    
+public:
+    enum BufferStrategy {
+        STRATEGY_AGGRESSIVE,  // 积极缓存，高流畅度
+        STRATEGY_BALANCED,    // 平衡策略
+        STRATEGY_CONSERVATIVE // 保守缓存，低内存占用
+    };
+    
+    // 数据写入缓冲区
+    int writeData(const uint8_t* data, size_t size) {
+        if (circular_buffer_.availableSpace() < size) {
+            // 根据策略决定是否覆盖旧数据
+            if (strategy_ == STRATEGY_AGGRESSIVE) {
+                circular_buffer_.discardOldData(size);
+            } else {
+                return 0; // 缓冲区满，拒绝写入
+            }
+        }
+        
+        return circular_buffer_.write(data, size);
+    }
+    
+    // 从缓冲区读取数据
+    int readData(uint8_t* data, size_t size) {
+        return circular_buffer_.read(data, size);
+    }
+};
+\`\`\`
+
+## 预加载策略设计
+
+### 1. 智能预加载算法
+\`\`\`cpp
+class SmartPreloader {
+private:
+    struct PreloadTask {
+        int64_t start_pos;
+        int64_t end_pos;
+        int priority;
+        std::chrono::steady_clock::time_point created_time;
+    };
+    
+    std::priority_queue<PreloadTask> preload_queue_;
+    NetworkManager* network_manager_;
+    
+public:
+    // 基于用户行为预测的预加载
+    void predictAndPreload(UserBehavior& behavior) {
+        if (behavior.likely_to_seek) {
+            // 用户可能seek，预加载关键位置
+            preloadKeyPositions(behavior.video_duration);
+        }
+        
+        if (behavior.will_watch_full_video) {
+            // 用户可能看完整个视频，顺序预加载
+            preloadSequentialData(behavior.current_position);
+        }
+    }
+    
+    // 预加载关键帧位置
+    void preloadKeyPositions(int64_t duration) {
+        auto keyframes = getKeyFramePositions(duration);
+        for (auto pos : keyframes) {
+            PreloadTask task{
+                .start_pos = pos - 2 * 1000000, // 前2秒
+                .end_pos = pos + 2 * 1000000,   // 后2秒
+                .priority = calculatePriority(pos),
+                .created_time = std::chrono::steady_clock::now()
+            };
+            preload_queue_.push(task);
+        }
+    }
+};
+\`\`\`
+
+### 2. 网络状态感知预加载
+\`\`\`cpp
+class NetworkAwarePreloader {
+private:
+    enum NetworkType {
+        NETWORK_WIFI,     // WiFi网络，积极预加载
+        NETWORK_4G,       // 4G网络，适度预加载
+        NETWORK_3G,       // 3G网络，保守预加载
+        NETWORK_2G        // 2G网络，最小预加载
+    };
+    
+    NetworkType current_network_;
+    size_t max_preload_size_;
+    
+public:
+    void onNetworkChanged(NetworkType new_type) {
+        current_network_ = new_type;
+        updatePreloadStrategy();
+    }
+    
+    void updatePreloadStrategy() {
+        switch (current_network_) {
+            case NETWORK_WIFI:
+                max_preload_size_ = 50 * 1024 * 1024; // 50MB
+                break;
+            case NETWORK_4G:
+                max_preload_size_ = 20 * 1024 * 1024; // 20MB
+                break;
+            case NETWORK_3G:
+                max_preload_size_ = 10 * 1024 * 1024; // 10MB
+                break;
+            case NETWORK_2G:
+                max_preload_size_ = 5 * 1024 * 1024;  // 5MB
+                break;
+        }
+    }
+};
+\`\`\`
+
+## 缓存管理策略
+
+### 1. LRU缓存实现
+\`\`\`cpp
+class LRUCache {
+private:
+    struct CacheNode {
+        std::string key;
+        std::vector<uint8_t> data;
+        std::chrono::steady_clock::time_point last_access;
+        size_t size;
+    };
+    
+    std::unordered_map<std::string, std::list<CacheNode>::iterator> cache_map_;
+    std::list<CacheNode> cache_list_;
+    size_t total_size_;
+    size_t max_size_;
+    
+public:
+    bool get(const std::string& key, std::vector<uint8_t>& data) {
+        auto it = cache_map_.find(key);
+        if (it == cache_map_.end()) {
+            return false; // 缓存未命中
+        }
+        
+        // 移动到链表头部（最近使用）
+        cache_list_.splice(cache_list_.begin(), cache_list_, it->second);
+        it->second->last_access = std::chrono::steady_clock::now();
+        
+        data = it->second->data;
+        return true;
+    }
+    
+    void put(const std::string& key, const std::vector<uint8_t>& data) {
+        // 检查是否需要清理缓存
+        while (total_size_ + data.size() > max_size_) {
+            evictLRU();
+        }
+        
+        // 添加新缓存项
+        CacheNode node{
+            .key = key,
+            .data = data,
+            .last_access = std::chrono::steady_clock::now(),
+            .size = data.size()
+        };
+        
+        cache_list_.push_front(node);
+        cache_map_[key] = cache_list_.begin();
+        total_size_ += data.size();
+    }
+    
+private:
+    void evictLRU() {
+        if (cache_list_.empty()) return;
+        
+        auto last = cache_list_.end();
+        last--;
+        
+        total_size_ -= last->size;
+        cache_map_.erase(last->key);
+        cache_list_.pop_back();
+    }
+};
+\`\`\`
+
+### 2. 磁盘缓存管理
+\`\`\`cpp
+class DiskCache {
+private:
+    std::string cache_dir_;
+    size_t max_disk_usage_;
+    std::unordered_map<std::string, CacheInfo> cache_index_;
+    
+    struct CacheInfo {
+        std::string file_path;
+        size_t file_size;
+        std::chrono::steady_clock::time_point last_access;
+        int access_count;
+    };
+    
+public:
+    // 存储数据到磁盘缓存
+    bool storeToDisk(const std::string& key, const std::vector<uint8_t>& data) {
+        std::string file_path = getCacheFilePath(key);
+        
+        // 检查磁盘空间
+        if (getDiskUsage() + data.size() > max_disk_usage_) {
+            cleanupOldFiles();
+        }
+        
+        // 写入文件
+        std::ofstream file(file_path, std::ios::binary);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        file.write(reinterpret_cast<const char*>(data.data()), data.size());
+        file.close();
+        
+        // 更新索引
+        CacheInfo info{
+            .file_path = file_path,
+            .file_size = data.size(),
+            .last_access = std::chrono::steady_clock::now(),
+            .access_count = 1
+        };
+        cache_index_[key] = info;
+        
+        return true;
+    }
+    
+    // 从磁盘缓存读取
+    bool loadFromDisk(const std::string& key, std::vector<uint8_t>& data) {
+        auto it = cache_index_.find(key);
+        if (it == cache_index_.end()) {
+            return false;
+        }
+        
+        std::ifstream file(it->second.file_path, std::ios::binary);
+        if (!file.is_open()) {
+            return false;
+        }
+        
+        file.seekg(0, std::ios::end);
+        size_t file_size = file.tellg();
+        file.seekg(0, std::ios::beg);
+        
+        data.resize(file_size);
+        file.read(reinterpret_cast<char*>(data.data()), file_size);
+        
+        // 更新访问信息
+        it->second.last_access = std::chrono::steady_clock::now();
+        it->second.access_count++;
+        
+        return true;
+    }
+};
+\`\`\`
+
+## 性能监控与调优
+
+### 1. 缓存命中率监控
+\`\`\`cpp
+class CacheMetrics {
+private:
+    std::atomic<uint64_t> cache_hits_{0};
+    std::atomic<uint64_t> cache_misses_{0};
+    std::atomic<uint64_t> preload_hits_{0};
+    
+public:
+    void recordCacheHit() {
+        cache_hits_++;
+    }
+    
+    void recordCacheMiss() {
+        cache_misses_++;
+    }
+    
+    void recordPreloadHit() {
+        preload_hits_++;
+    }
+    
+    double getCacheHitRate() const {
+        uint64_t total = cache_hits_ + cache_misses_;
+        return total > 0 ? static_cast<double>(cache_hits_) / total : 0.0;
+    }
+    
+    void printMetrics() const {
+        ALOGD("Cache Metrics:");
+        ALOGD("  Hit Rate: %.2f%%", getCacheHitRate() * 100);
+        ALOGD("  Preload Hits: %llu", preload_hits_.load());
+        ALOGD("  Total Requests: %llu", cache_hits_ + cache_misses_);
+    }
+};
+\`\`\`
+
+### 2. 自适应缓冲策略
+\`\`\`cpp
+class AdaptiveBuffer {
+private:
+    int current_buffer_size_;
+    int min_buffer_size_;
+    int max_buffer_size_;
+    std::vector<double> network_speed_history_;
+    
+public:
+    void adjustBufferSize(double current_speed) {
+        network_speed_history_.push_back(current_speed);
+        if (network_speed_history_.size() > 10) {
+            network_speed_history_.erase(network_speed_history_.begin());
+        }
+        
+        double avg_speed = calculateAverageSpeed();
+        
+        if (avg_speed < 1000000) { // < 1Mbps
+            // 网络较慢，增加缓冲区
+            current_buffer_size_ = std::min(
+                current_buffer_size_ * 2, max_buffer_size_);
+        } else if (avg_speed > 5000000) { // > 5Mbps
+            // 网络较快，可以减少缓冲区
+            current_buffer_size_ = std::max(
+                current_buffer_size_ / 2, min_buffer_size_);
+        }
+    }
+};
+\`\`\`
+
+## 测试验证方案
+
+### 1. 预加载效果测试
+\`\`\`bash
+# 测试预加载命中率
+test_preload_hit_rate() {
+    start_player_with_preload
+    simulate_user_seek_behavior
+    measure_preload_effectiveness
+}
+
+# 测试不同网络环境下的表现
+test_network_adaptation() {
+    for network_type in wifi 4g 3g; do
+        simulate_network_condition $network_type
+        measure_buffer_underrun_rate
+        measure_startup_latency
+    done
+}
+\`\`\`
+
+### 2. 缓存性能测试
+\`\`\`cpp
+// 缓存性能基准测试
+void benchmarkCachePerformance() {
+    const int test_iterations = 10000;
+    std::vector<uint8_t> test_data(1024 * 1024); // 1MB测试数据
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    
+    for (int i = 0; i < test_iterations; i++) {
+        std::string key = "test_key_" + std::to_string(i);
+        cache.put(key, test_data);
+        
+        std::vector<uint8_t> retrieved_data;
+        cache.get(key, retrieved_data);
+    }
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    
+    ALOGD("Cache benchmark: %d operations in %lld ms", 
+          test_iterations * 2, duration.count());
+}
+\`\`\`
+
+通过合理设计预加载和缓存策略，可以显著提升播放器的性能表现，减少卡顿和启动延迟，为用户提供更流畅的播放体验。`,
+            date: "2025-12-18",
+            tags: ["预加载", "缓存策略", "性能优化", "播放器", "缓冲管理"],
+            author: "技术博主",
+            readTime: "18分钟"
+          }
       ];
 
 // 所有标签
