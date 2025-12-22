@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>技术博客 - 高颜值前端博客</title>
+    <title>测试开发技术博客 - 音视频测试与开发实践</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -11,10 +11,10 @@
         theme: {
           extend: {
             colors: {
-              primary: '#3B82F6',
-              secondary: '#10B981',
-              accent: '#8B5CF6',
-              dark: '#1F2937',
+              primary: '#2563eb',
+              secondary: '#7c3aed', 
+              accent: '#10b981',
+              dark: '#1e293b',
             }
           }
         }
@@ -22,7 +22,7 @@
     </script>
     <style>
       .gradient-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
       }
       .card-hover {
         transition: all 0.3s ease;
@@ -48,42 +48,44 @@
   <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     <div id="app">
       <!-- 导航栏 -->
-      <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between h-16 md:h-20">
-            <a href="#/" class="flex items-center space-x-2">
-              <span class="text-2xl font-bold text-primary">Blog</span>
-            </a>
-            <div class="hidden md:flex items-center space-x-8">
-              <a href="#/" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">首页</a>
-              <a href="#/posts" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">文章</a>
-              <a href="#/tags" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">标签</a>
-              <a href="#/about" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">关于我</a>
-              <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                🌙
-              </button>
+        <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
+          <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+              <a href="#/" class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <span class="text-white font-bold">🧪</span>
+                </div>
+                <span class="text-2xl font-bold text-primary">测试开发技术博客</span>
+              </a>
+              <div class="hidden md:flex items-center space-x-8">
+                <a href="#/" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">首页</a>
+                <a href="#/posts" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">文章</a>
+                <a href="#/tags" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">标签</a>
+                <a href="#/about" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">关于我</a>
+                <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                  <span class="dark:hidden">🌙</span>
+                  <span class="hidden dark:inline">☀️</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
       <!-- 首页 -->
       <div id="home-page" class="page active">
         <div class="gradient-bg text-white py-20 md:py-32">
           <div class="container mx-auto px-4 text-center">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
-              欢迎来到我的技术博客
+              专注音视频测试与开发
             </h1>
             <p class="text-xl md:text-2xl mb-8 opacity-90">
-              分享前端开发经验，记录技术成长之路
+              深度解析音视频技术，分享测试开发实战经验
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-              <a href="#/posts" class="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
-                开始阅读
-              </a>
-              <a href="#/about" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition-colors">
-                了解更多
-              </a>
+              <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm">🎵 音频处理</span>
+              <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm">🎬 视频解码</span>
+              <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm">🧪 测试技术</span>
+              <span class="bg-white/20 backdrop-blur px-4 py-2 rounded-full text-sm">⚡ 性能优化</span>
             </div>
           </div>
         </div>
@@ -126,46 +128,88 @@
 
       <!-- 关于页面 -->
       <div id="about-page" class="page">
-        <div class="container mx-auto px-4 py-20">
-          <div class="max-w-4xl mx-auto">
-            <h1 class="text-4xl font-bold text-center mb-12">关于我</h1>
-            <div class="bg-white dark:bg-dark rounded-lg shadow-lg p-8">
-              <div class="text-center mb-8">
-                <div class="w-32 h-32 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span class="text-4xl text-white font-bold">B</span>
+        <div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+          <div class="container mx-auto px-4 py-16">
+            <div class="max-w-4xl mx-auto">
+              <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+                <div class="gradient-bg p-8 text-white">
+                  <h1 class="text-3xl md:text-4xl font-bold mb-4">关于测试开发技术博客</h1>
+                  <p class="text-xl opacity-90">专注音视频测试与开发实践</p>
                 </div>
-                <h2 class="text-2xl font-bold mb-4">技术博主</h2>
-                <p class="text-gray-600 dark:text-gray-400">前端开发工程师</p>
-              </div>
-              <div class="space-y-6">
-                <div>
-                  <h3 class="text-xl font-bold mb-3">👋 你好！</h3>
-                  <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    我是一名热爱前端开发的技术博主，专注于现代前端技术的学习和分享。
-                    通过这个博客，我希望能够记录自己的学习历程，分享开发经验，
-                    帮助更多的开发者成长。
-                  </p>
-                </div>
-                <div>
-                  <h3 class="text-xl font-bold mb-3">🚀 技能栈</h3>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">React</span>
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">TypeScript</span>
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">JavaScript</span>
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">CSS</span>
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Tailwind CSS</span>
-                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Node.js</span>
+                
+                <div class="p-8">
+                  <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div>
+                      <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">🎯 博客定位</h2>
+                      <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        本博客专注于音视频领域的测试开发技术，涵盖音频处理、视频解码、性能优化、测试验证等核心技术栈。
+                        通过深入的技术解析和实战经验分享，帮助测试开发工程师提升技术能力和解决实际问题。
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">🧪 技术栈</h2>
+                      <div class="grid grid-cols-2 gap-2">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">音频处理</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">视频解码</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">性能测试</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">自动化测试</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Windows API</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Android开发</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">硬件加速</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">FFmpeg</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <h3 class="text-xl font-bold mb-3">📧 联系方式</h3>
-                  <p class="text-gray-700 dark:text-gray-300">
-                    如果你对我的文章感兴趣，或者想要交流技术问题，欢迎通过以下方式联系我：
-                  </p>
-                  <div class="flex flex-wrap gap-4 mt-4">
-                    <a href="#" class="text-primary hover:underline">GitHub</a>
-                    <a href="#" class="text-primary hover:underline">Twitter</a>
-                    <a href="#" class="text-primary hover:underline">Email</a>
+                  
+                  <div class="border-t border-gray-200 dark:border-gray-700 pt-8">
+                    <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">� 核心内容模块</h2>
+                    <div class="grid md:grid-cols-3 gap-6">
+                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="font-bold text-lg mb-3 text-primary">🎵 音频技术</h3>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                          <li>• Windows音频API对比</li>
+                          <li>• Android音频采集方案</li>
+                          <li>• 左右声道测试技术</li>
+                          <li>• 音频延迟优化</li>
+                        </ul>
+                      </div>
+                      
+                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="font-bold text-lg mb-3 text-primary">🎬 视频技术</h3>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                          <li>• 硬解vs软解技术</li>
+                          <li>• NVIDIA显卡优化</li>
+                          <li>• EVR渲染模式</li>
+                          <li>• 4K/8K视频处理</li>
+                        </ul>
+                      </div>
+                      
+                      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-xl">
+                        <h3 class="font-bold text-lg mb-3 text-primary">🧪 测试技术</h3>
+                        <ul class="space-y-2 text-gray-600 dark:text-gray-300">
+                          <li>• 性能基准测试</li>
+                          <li>• 自动化测试方案</li>
+                          <li>• 兼容性验证</li>
+                          <li>• 缓存策略测试</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="border-t border-gray-200 dark:border-gray-700 pt-8 mt-8">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">📧 联系方式</h2>
+                    <div class="flex flex-wrap gap-4">
+                      <a href="#" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary/90 transition-colors">
+                        GitHub
+                      </a>
+                      <a href="#" class="bg-secondary text-white px-6 py-2 rounded-full hover:bg-secondary/90 transition-colors">
+                        技术交流群
+                      </a>
+                      <a href="#" class="bg-accent text-white px-6 py-2 rounded-full hover:bg-accent/90 transition-colors">
+                        邮箱联系
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -212,41 +256,219 @@
     </div>
 
     <script>
-      // 模拟数据
+      // 模拟数据 - 测试开发工程师主题文章
       const posts = [
         {
           id: 1,
-          title: "React 18 新特性详解",
-          excerpt: "深入了解React 18带来的并发特性、自动批处理、Suspense改进等重要更新...",
-          content: "React 18是React历史上最重要的版本之一，引入了许多新特性。并发特性让React能够中断和恢复渲染工作，自动批处理减少了不必要的重新渲染，Suspense的改进让异步组件处理更加优雅。",
-          date: "2024-01-15",
-          tags: ["React", "前端", "JavaScript"],
+          title: "Windows音视频采集技术详解：DirectSound vs WaveOut vs WASAPI",
+          excerpt: "深度解析Windows平台三大音频API的技术差异、适用场景及测试要点，涵盖DirectSound硬件加速、WaveOut兼容性、WASAPI低延迟等核心特性。",
+          content: `
+# Windows音视频采集技术详解
+
+## 核心API对比
+
+### 1. WaveOut API
+- **特点**：最早的音频播放API，属于Win32 API的一部分
+- **优势**：接口简单，兼容性高，资源占用率低
+- **劣势**：无缓冲和同步机制，实时播放能力较弱
+- **适用场景**：基本音频播放，对音频质量要求不高的应用
+
+### 2. DirectSound
+- **特点**：DirectX组件，专为高质量音频处理设计
+- **优势**：支持硬件加速，多声道输出，灵活的缓冲区管理
+- **劣势**：相对复杂，需要DirectX运行时
+- **适用场景**：游戏和多媒体应用，复杂音频混合控制
+
+### 3. WASAPI
+- **特点**：Windows Vista+的新音频API，专为低延迟设计
+- **优势**：直接访问音频设备，支持共享和独占模式
+- **劣势**：仅支持较新Windows版本
+- **适用场景**：专业音频应用，实时音频处理
+
+## 测试验证要点
+
+1. **延迟测试**：测量各API的音频延迟，WASAPI应显著低于其他API
+2. **兼容性测试**：验证不同Windows版本的API可用性
+3. **性能测试**：监控CPU占用率和内存使用情况
+4. **音质测试**：评估音频输出的保真度和失真情况
+
+## 实际应用建议
+
+- **优先选择WASAPI**：对于需要低延迟的现代应用
+- **DirectSound作为备选**：当需要硬件加速或兼容旧系统时
+- **WaveOut用于简单场景**：基本播放功能，快速实现
+          `,
+          date: "2025-12-22",
+          tags: ["音频处理", "Windows", "API", "测试技术"],
           author: "技术博主",
           readTime: "8分钟"
         },
         {
           id: 2,
-          title: "TypeScript最佳实践",
-          excerpt: "分享在实际项目中使用TypeScript的经验和最佳实践，提高代码质量...",
-          content: "TypeScript为JavaScript带来了类型安全，让我们能够在开发阶段就发现潜在的错误。通过合理的类型定义、接口设计和泛型使用，我们可以编写出更加健壮和可维护的代码。",
-          date: "2024-01-12",
-          tags: ["TypeScript", "前端", "最佳实践"],
+          title: "Android音频采集：OpenSLES vs AudioRecord深度对比分析",
+          excerpt: "全面对比Android平台两大音频采集方案，从性能、兼容性、开发复杂度等维度分析OpenSLES和AudioRecord的优劣，助你选择合适的音频采集方案。",
+          content: `
+# Android音频采集技术对比
+
+## OpenSLES详解
+
+### 核心特性
+- **跨平台性**：支持Android、iOS等多个平台
+- **低延迟**：绕过Java层，直接处理PCM数据
+- **C/C++实现**：通过NDK提供，适合性能敏感场景
+- **专业音频功能**：支持播放、录制、音效处理
+
+### 开发要点
+\`\`\`cpp
+// OpenSLES引擎创建
+SLresult result = slCreateEngine(&engineObject, 0, NULL, 0, NULL, NULL);
+result = (*engineObject)->Realize(engineObject, SL_BOOLEAN_FALSE);
+result = (*engineObject)->GetInterface(engineObject, SL_IID_ENGINE, &engine);
+\`\`\`
+
+### 适用场景
+- 游戏音频引擎
+- 音乐制作应用
+- 实时音频处理
+- 低延迟通信应用
+
+## AudioRecord详解
+
+### 核心特性
+- **Java层API**：使用简单，集成方便
+- **自动权限管理**：自动处理录音权限
+- **生命周期绑定**：与Activity/Fragment生命周期同步
+- **格式支持丰富**：支持多种音频格式和采样率
+
+### 开发要点
+\`\`\`java
+// AudioRecord初始化
+AudioRecord audioRecord = new AudioRecord(
+    MediaRecorder.AudioSource.MIC,
+    sampleRate,
+    AudioFormat.CHANNEL_IN_MONO,
+    AudioFormat.ENCODING_PCM_16BIT,
+    bufferSize
+);
+\`\`\`
+
+### 适用场景
+- 普通录音应用
+- 语音识别
+- 大部分Android应用开发
+
+## 性能对比
+
+| 维度 | OpenSLES | AudioRecord |
+|------|----------|-------------|
+| 延迟 | 极低（<10ms） | 中等（20-50ms） |
+| CPU占用 | 低 | 中等 |
+| 开发复杂度 | 高 | 低 |
+| 兼容性 | 好 | 极好 |
+| 功能灵活性 | 高 | 中等 |
+
+## 选择建议
+
+1. **选择OpenSLES的场景**：
+   - 需要极低延迟的实时音频处理
+   - 游戏音频引擎
+   - 跨平台音频应用
+
+2. **选择AudioRecord的场景**：
+   - 普通录音功能
+   - 快速开发需求
+   - 对延迟要求不高的应用
+          `,
+          date: "2025-12-21",
+          tags: ["Android", "音频采集", "OpenSLES", "AudioRecord", "性能对比"],
           author: "技术博主",
-          readTime: "6分钟"
+          readTime: "10分钟"
         },
         {
           id: 3,
-          title: "Tailwind CSS实用技巧",
-          excerpt: "掌握Tailwind CSS的高级用法和实用技巧，提升开发效率...",
-          content: "Tailwind CSS是一个功能强大的CSS框架，它提供了大量的工具类来快速构建现代化的用户界面。通过合理使用配置文件、自定义样式和组件化思维，我们可以大幅提升开发效率。",
-          date: "2024-01-10",
-          tags: ["CSS", "Tailwind", "样式"],
+          title: "音视频硬解vs软解：技术原理、性能差异与测试验证",
+          excerpt: "深入解析音视频解码的两种核心技术方案，从硬件架构、性能表现、兼容性等角度全面对比硬解和软解，提供完整的测试验证方案。",
+          content: `
+# 音视频硬解vs软解技术全解析
+
+## 核心定义
+
+### 硬解（硬件解码）
+- **执行主体**：专用硬件解码模块（GPU/解码芯片）
+- **工作原理**：利用硬件并行处理能力，专为解码优化设计
+- **典型接口**：Android MediaCodec、iOS VideoToolbox、PC端显卡API
+
+### 软解（软件解码）
+- **执行主体**：CPU通过软件算法完成解码
+- **工作原理**：纯软件实现，依赖CPU计算能力
+- **典型工具**：FFmpeg libavcodec、OpenH264
+
+## 性能对比分析
+
+| 对比维度 | 硬解 | 软解 |
+|----------|------|------|
+| CPU占用 | 极低（≤10%） | 高（4K可达60%+） |
+| 功耗表现 | 低 | 高 |
+| 解码性能 | 强（支持8K 60fps） | 受CPU性能限制 |
+| 格式兼容性 | 依赖硬件支持 | 强（软件库快速支持） |
+| 延迟表现 | 低（≤50ms） | 高（≥100ms） |
+
+## 测试验证方案
+
+### 1. 性能测试
+\`\`\`bash
+# 监控CPU使用率
+top -p [player_pid]
+
+# 监控内存占用
+cat /proc/[pid]/status
+
+# 测量解码延迟
+ffprobe -show_frames -select_streams v:0 input.mp4
+\`\`\`
+
+### 2. 兼容性测试
+- 测试不同编码格式：H.264、H.265、AV1、VP9
+- 测试不同分辨率：720P、1080P、4K、8K
+- 测试不同码率：1Mbps-50Mbps
+
+### 3. 画质评估
+- 客观指标：PSNR、SSIM、VMAF
+- 主观评估：MOS评分
+- 特殊场景：运动画面、暗部细节、色彩还原
+
+## 实际应用建议
+
+### 优先选择硬解的场景
+1. **高码率高清视频**：4K/8K视频播放
+2. **移动端设备**：电池续航考虑
+3. **实时性要求高**：直播、视频通话
+4. **多任务并行**：同时运行多个应用
+
+### 优先选择软解的场景
+1. **格式兼容性要求高**：小众格式、新兴编码
+2. **后处理需求复杂**：视频剪辑、滤镜处理
+3. **跨平台一致性**：多平台统一体验
+4. **老旧设备**：无硬件解码支持
+
+## 混合解码策略
+
+现代播放器通常采用"硬解优先，软解兜底"策略：
+
+1. **检测硬件支持**：查询设备解码能力
+2. **尝试硬解**：优先使用硬件解码
+3. **降级处理**：硬解失败时自动切换软解
+4. **动态调整**：根据播放状态动态选择解码方式
+          `,
+          date: "2025-12-20",
+          tags: ["音视频解码", "硬解", "软解", "性能测试", "兼容性"],
           author: "技术博主",
-          readTime: "5分钟"
+          readTime: "12分钟"
         }
       ];
 
-      const allTags = ["React", "TypeScript", "JavaScript", "CSS", "Tailwind", "前端", "最佳实践", "样式"];
+// 所有标签
+      const allTags = ["音频处理", "视频解码", "测试技术", "性能优化", "Android", "Windows", "API", "硬解", "软解", "兼容性", "预加载", "缓存策略", "NVIDIA", "EVR", "声道测试", "文件制作", "验证方案", "OpenSLES", "AudioRecord", "音视频解码"];
 
       // 路由管理
       class Router {
