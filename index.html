@@ -2,7 +2,6 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>技术博客 - 高颜值前端博客</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,10 +20,6 @@
         }
       }
     </script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-router-dom@6.8.1/umd/react-router-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
       .gradient-bg {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -42,30 +37,188 @@
       .tag-hover:hover {
         transform: scale(1.05);
       }
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
     </style>
   </head>
   <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-    <div id="root"></div>
-    <script type="text/babel" data-presets="env,react">
-      const React = window.React;
-      const ReactDOM = window.ReactDOM;
-      const ReactRouterDOM = window.ReactRouterDOM;
-      
-      // 检查依赖是否正确加载
-      if (!React || !ReactDOM || !ReactRouterDOM) {
-        console.error('依赖加载失败:', { React, ReactDOM, ReactRouterDOM });
-      }
-      
-      const { useState, useEffect } = React;
-      const { HashRouter: Router, Routes, Route, Link, useLocation } = ReactRouterDOM;
+    <div id="app">
+      <!-- 导航栏 -->
+      <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16 md:h-20">
+            <a href="#/" class="flex items-center space-x-2">
+              <span class="text-2xl font-bold text-primary">Blog</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8">
+              <a href="#/" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">首页</a>
+              <a href="#/posts" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">文章</a>
+              <a href="#/tags" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">标签</a>
+              <a href="#/about" class="nav-link text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">关于我</a>
+              <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                🌙
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
 
+      <!-- 首页 -->
+      <div id="home-page" class="page active">
+        <div class="gradient-bg text-white py-20 md:py-32">
+          <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">
+              欢迎来到我的技术博客
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+              分享前端开发经验，记录技术成长之路
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+              <a href="#/posts" class="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                开始阅读
+              </a>
+              <a href="#/about" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition-colors">
+                了解更多
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="container mx-auto px-4 py-16">
+          <h2 class="text-3xl font-bold text-center mb-12">最新文章</h2>
+          <div id="home-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 文章卡片将通过JavaScript动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 全部文章页 -->
+      <div id="posts-page" class="page">
+        <div class="container mx-auto px-4 py-20">
+          <h1 class="text-4xl font-bold text-center mb-12">全部文章</h1>
+          <div id="all-posts" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 文章卡片将通过JavaScript动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 文章详情页 -->
+      <div id="post-detail-page" class="page">
+        <div class="container mx-auto px-4 py-20">
+          <article id="post-content" class="max-w-4xl mx-auto">
+            <!-- 文章内容将通过JavaScript动态生成 -->
+          </article>
+        </div>
+      </div>
+
+      <!-- 标签页 -->
+      <div id="tags-page" class="page">
+        <div class="container mx-auto px-4 py-20">
+          <h1 class="text-4xl font-bold text-center mb-12">标签云</h1>
+          <div id="tags-cloud" class="flex flex-wrap justify-center gap-4">
+            <!-- 标签将通过JavaScript动态生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 关于页面 -->
+      <div id="about-page" class="page">
+        <div class="container mx-auto px-4 py-20">
+          <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-bold text-center mb-12">关于我</h1>
+            <div class="bg-white dark:bg-dark rounded-lg shadow-lg p-8">
+              <div class="text-center mb-8">
+                <div class="w-32 h-32 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <span class="text-4xl text-white font-bold">B</span>
+                </div>
+                <h2 class="text-2xl font-bold mb-4">技术博主</h2>
+                <p class="text-gray-600 dark:text-gray-400">前端开发工程师</p>
+              </div>
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-xl font-bold mb-3">👋 你好！</h3>
+                  <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    我是一名热爱前端开发的技术博主，专注于现代前端技术的学习和分享。
+                    通过这个博客，我希望能够记录自己的学习历程，分享开发经验，
+                    帮助更多的开发者成长。
+                  </p>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-3">🚀 技能栈</h3>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">React</span>
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">TypeScript</span>
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">JavaScript</span>
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">CSS</span>
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Tailwind CSS</span>
+                    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Node.js</span>
+                  </div>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-3">📧 联系方式</h3>
+                  <p class="text-gray-700 dark:text-gray-300">
+                    如果你对我的文章感兴趣，或者想要交流技术问题，欢迎通过以下方式联系我：
+                  </p>
+                  <div class="flex flex-wrap gap-4 mt-4">
+                    <a href="#" class="text-primary hover:underline">GitHub</a>
+                    <a href="#" class="text-primary hover:underline">Twitter</a>
+                    <a href="#" class="text-primary hover:underline">Email</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 页脚 -->
+      <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 class="text-xl font-bold mb-4">技术博客</h3>
+              <p class="text-gray-400">
+                分享前端开发经验，记录技术成长之路
+              </p>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold mb-4">快速链接</h4>
+              <ul class="space-y-2">
+                <li><a href="#/" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                <li><a href="#/posts" class="text-gray-400 hover:text-white transition-colors">文章</a></li>
+                <li><a href="#/tags" class="text-gray-400 hover:text-white transition-colors">标签</a></li>
+                <li><a href="#/about" class="text-gray-400 hover:text-white transition-colors">关于我</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold mb-4">联系方式</h4>
+              <div class="flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">GitHub</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">Twitter</a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors">Email</a>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+            <p class="text-gray-400">
+              © 2024 技术博客. 保留所有权利.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
       // 模拟数据
       const posts = [
         {
           id: 1,
           title: "React 18 新特性详解",
           excerpt: "深入了解React 18带来的并发特性、自动批处理、Suspense改进等重要更新...",
-          content: "React 18是React历史上最重要的版本之一，引入了许多新特性...",
+          content: "React 18是React历史上最重要的版本之一，引入了许多新特性。并发特性让React能够中断和恢复渲染工作，自动批处理减少了不必要的重新渲染，Suspense的改进让异步组件处理更加优雅。",
           date: "2024-01-15",
           tags: ["React", "前端", "JavaScript"],
           author: "技术博主",
@@ -75,7 +228,7 @@
           id: 2,
           title: "TypeScript最佳实践",
           excerpt: "分享在实际项目中使用TypeScript的经验和最佳实践，提高代码质量...",
-          content: "TypeScript为JavaScript带来了类型安全...",
+          content: "TypeScript为JavaScript带来了类型安全，让我们能够在开发阶段就发现潜在的错误。通过合理的类型定义、接口设计和泛型使用，我们可以编写出更加健壮和可维护的代码。",
           date: "2024-01-12",
           tags: ["TypeScript", "前端", "最佳实践"],
           author: "技术博主",
@@ -85,7 +238,7 @@
           id: 3,
           title: "Tailwind CSS实用技巧",
           excerpt: "掌握Tailwind CSS的高级用法和实用技巧，提升开发效率...",
-          content: "Tailwind CSS是一个功能强大的CSS框架...",
+          content: "Tailwind CSS是一个功能强大的CSS框架，它提供了大量的工具类来快速构建现代化的用户界面。通过合理使用配置文件、自定义样式和组件化思维，我们可以大幅提升开发效率。",
           date: "2024-01-10",
           tags: ["CSS", "Tailwind", "样式"],
           author: "技术博主",
@@ -95,303 +248,189 @@
 
       const allTags = ["React", "TypeScript", "JavaScript", "CSS", "Tailwind", "前端", "最佳实践", "样式"];
 
-      // 导航栏组件
-      const Navbar = () => {
-        const [isScrolled, setIsScrolled] = useState(false);
-        const [isDarkMode, setIsDarkMode] = useState(false);
+      // 路由管理
+      class Router {
+        constructor() {
+          this.routes = {};
+          this.currentPage = 'home-page';
+          this.init();
+        }
 
-        useEffect(() => {
-          const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-          };
-          window.addEventListener('scroll', handleScroll);
-          return () => window.removeEventListener('scroll', handleScroll);
-        }, []);
+        init() {
+          window.addEventListener('hashchange', () => this.handleRoute());
+          window.addEventListener('load', () => this.handleRoute());
+          this.setupNavigation();
+          this.setupDarkMode();
+        }
 
-        useEffect(() => {
+        handleRoute() {
+          const hash = window.location.hash.slice(1) || '/';
+          this.navigateTo(hash);
+        }
+
+        navigateTo(path) {
+          // 隐藏所有页面
+          document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+          });
+
+          // 显示对应页面
+          let pageId = 'home-page';
+          if (path === '/') {
+            pageId = 'home-page';
+          } else if (path === '/posts') {
+            pageId = 'posts-page';
+          } else if (path.startsWith('/posts/')) {
+            pageId = 'post-detail-page';
+            const postId = path.split('/')[2];
+            this.showPostDetail(postId);
+          } else if (path === '/tags') {
+            pageId = 'tags-page';
+          } else if (path === '/about') {
+            pageId = 'about-page';
+          }
+
+          const targetPage = document.getElementById(pageId);
+          if (targetPage) {
+            targetPage.classList.add('active');
+            this.currentPage = pageId;
+          }
+
+          // 更新导航栏样式
+          this.updateNavigation(path);
+        }
+
+        setupNavigation() {
+          // 导航链接已经通过HTML的href属性设置了hash路由
+        }
+
+        updateNavigation(currentPath) {
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('text-primary');
+            link.classList.add('text-gray-700', 'dark:text-gray-300');
+          });
+
+          const activeLink = document.querySelector(`.nav-link[href="#${currentPath}"]`);
+          if (activeLink) {
+            activeLink.classList.remove('text-gray-700', 'dark:text-gray-300');
+            activeLink.classList.add('text-primary');
+          }
+        }
+
+        setupDarkMode() {
+          const darkModeToggle = document.getElementById('darkModeToggle');
           const savedMode = localStorage.getItem('darkMode');
           const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
           const isDark = savedMode ? JSON.parse(savedMode) : prefersDark;
-          setIsDarkMode(isDark);
+
           document.documentElement.classList.toggle('dark', isDark);
-        }, []);
+          darkModeToggle.textContent = isDark ? '☀️' : '🌙';
 
-        const toggleDarkMode = () => {
-          const newMode = !isDarkMode;
-          setIsDarkMode(newMode);
-          localStorage.setItem('darkMode', JSON.stringify(newMode));
-          document.documentElement.classList.toggle('dark', newMode);
-        };
-
-        return (
-          <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled 
-            ? 'bg-white/95 dark:bg-dark/95 backdrop-blur-md shadow-md' 
-            : 'bg-transparent'}`}>
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between h-16 md:h-20">
-                <Link to="/" className="flex items-center space-x-2">
-                  <span className="text-2xl font-bold text-primary">Blog</span>
-                </Link>
-                <div className="hidden md:flex items-center space-x-8">
-                  <Link to="/" className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">首页</Link>
-                  <Link to="/posts" className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">文章</Link>
-                  <Link to="/tags" className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">标签</Link>
-                  <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">关于我</Link>
-                  <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                    {isDarkMode ? '🌙' : '☀️'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </nav>
-        );
-      };
-
-      // Banner组件
-      const Banner = () => (
-        <div className="gradient-bg text-white py-20 md:py-32">
-          <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              欢迎来到我的技术博客
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
-              分享前端开发经验，记录技术成长之路
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <button className="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
-                开始阅读
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition-colors">
-                了解更多
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-
-      // 文章卡片组件
-      const PostCard = ({ post }) => (
-        <div className="bg-white dark:bg-dark rounded-lg shadow-lg overflow-hidden card-hover">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-500 dark:text-gray-400">{post.date}</span>
-              <span className="text-sm text-gray-500 dark:text-gray-400">{post.readTime}</span>
-            </div>
-            <h3 className="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">
-              {post.title}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
-              {post.excerpt}
-            </p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {post.tags.map((tag, index) => (
-                <span key={index} className="tag-hover bg-primary/10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-primary hover:text-white">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <Link to={`/posts/${post.id}`} className="text-primary font-semibold hover:text-primary/80 transition-colors">
-              阅读更多 →
-            </Link>
-          </div>
-        </div>
-      );
-
-      // 首页组件
-      const HomePage = () => (
-        <div>
-          <Banner />
-          <div className="container mx-auto px-4 py-16">
-            <h2 className="text-3xl font-bold text-center mb-12">最新文章</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map(post => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-
-      // 全部文章页
-      const AllPostsPage = () => (
-        <div className="container mx-auto px-4 py-20">
-          <h1 className="text-4xl font-bold text-center mb-12">全部文章</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map(post => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        </div>
-      );
-
-      // 文章详情页
-      const PostDetailPage = () => {
-        const location = useLocation();
-        const id = location.pathname.split('/').pop();
-        const post = posts.find(p => p.id === parseInt(id));
-
-        if (!post) {
-          return (
-            <div className="container mx-auto px-4 py-20">
-              <h1 className="text-4xl font-bold text-center">文章未找到</h1>
-            </div>
-          );
+          darkModeToggle.addEventListener('click', () => {
+            const newMode = !document.documentElement.classList.contains('dark');
+            document.documentElement.classList.toggle('dark', newMode);
+            localStorage.setItem('darkMode', JSON.stringify(newMode));
+            darkModeToggle.textContent = newMode ? '☀️' : '🌙';
+          });
         }
 
-        return (
-          <div className="container mx-auto px-4 py-20">
-            <article className="max-w-4xl mx-auto">
-              <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center space-x-4">
-                  <span className="text-gray-600 dark:text-gray-400">{post.date}</span>
-                  <span className="text-gray-600 dark:text-gray-400">{post.author}</span>
-                  <span className="text-gray-600 dark:text-gray-400">{post.readTime}</span>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-8">
-                {post.tags.map((tag, index) => (
-                  <span key={index} className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="prose prose-lg dark:prose-invert max-w-none">
-                <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-                  {post.content}
-                </p>
-                <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mt-6">
-                  这里是文章的详细内容。在实际应用中，这里会包含完整的文章内容，包括代码示例、图片、链接等。
-                </p>
-              </div>
-            </article>
-          </div>
-        );
-      };
+        showPostDetail(postId) {
+          const post = posts.find(p => p.id === parseInt(postId));
+          if (!post) {
+            document.getElementById('post-content').innerHTML = `
+              <h1 class="text-4xl font-bold text-center">文章未找到</h1>
+            `;
+            return;
+          }
 
-      // 标签页
-      const TagsPage = () => (
-        <div className="container mx-auto px-4 py-20">
-          <h1 className="text-4xl font-bold text-center mb-12">标签云</h1>
-          <div className="flex flex-wrap justify-center gap-4">
-            {allTags.map((tag, index) => (
-              <span key={index} className="tag-hover bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full text-lg font-semibold cursor-pointer hover:shadow-lg">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      );
-
-      // 关于页面
-      const AboutPage = () => (
-        <div className="container mx-auto px-4 py-20">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl font-bold text-center mb-12">关于我</h1>
-            <div className="bg-white dark:bg-dark rounded-lg shadow-lg p-8">
-              <div className="text-center mb-8">
-                <div className="w-32 h-32 bg-gradient-to-r from-primary to-secondary rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <span className="text-4xl text-white font-bold">B</span>
-                </div>
-                <h2 className="text-2xl font-bold mb-4">技术博主</h2>
-                <p className="text-gray-600 dark:text-gray-400">前端开发工程师</p>
-              </div>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-bold mb-3">👋 你好！</h3>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    我是一名热爱前端开发的技术博主，专注于现代前端技术的学习和分享。
-                    通过这个博客，我希望能够记录自己的学习历程，分享开发经验，
-                    帮助更多的开发者成长。
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-3">🚀 技能栈</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {['React', 'TypeScript', 'JavaScript', 'CSS', 'Tailwind CSS', 'Node.js'].map((skill, index) => (
-                      <span key={index} className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-3">📧 联系方式</h3>
-                  <p className="text-gray-700 dark:text-gray-300">
-                    如果你对我的文章感兴趣，或者想要交流技术问题，欢迎通过以下方式联系我：
-                  </p>
-                  <div className="flex flex-wrap gap-4 mt-4">
-                    <a href="#" className="text-primary hover:underline">GitHub</a>
-                    <a href="#" className="text-primary hover:underline">Twitter</a>
-                    <a href="#" className="text-primary hover:underline">Email</a>
-                  </div>
-                </div>
+          document.getElementById('post-content').innerHTML = `
+            <h1 class="text-4xl font-bold mb-6">${post.title}</h1>
+            <div class="flex items-center justify-between mb-8">
+              <div class="flex items-center space-x-4">
+                <span class="text-gray-600 dark:text-gray-400">${post.date}</span>
+                <span class="text-gray-600 dark:text-gray-400">${post.author}</span>
+                <span class="text-gray-600 dark:text-gray-400">${post.readTime}</span>
               </div>
             </div>
-          </div>
-        </div>
-      );
-
-      // 页脚组件
-      const Footer = () => (
-        <footer className="bg-gray-800 text-white py-12">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div>
-                <h3 className="text-xl font-bold mb-4">技术博客</h3>
-                <p className="text-gray-400">
-                  分享前端开发经验，记录技术成长之路
-                </p>
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold mb-4">快速链接</h4>
-                <ul className="space-y-2">
-                  <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">首页</Link></li>
-                  <li><Link to="/posts" className="text-gray-400 hover:text-white transition-colors">文章</Link></li>
-                  <li><Link to="/tags" className="text-gray-400 hover:text-white transition-colors">标签</Link></li>
-                  <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">关于我</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-lg font-semibold mb-4">联系方式</h4>
-                <div className="flex space-x-4">
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">GitHub</a>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">Twitter</a>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors">Email</a>
-                </div>
-              </div>
+            <div class="flex flex-wrap gap-2 mb-8">
+              ${post.tags.map(tag => `<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">${tag}</span>`).join('')}
             </div>
-            <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-              <p className="text-gray-400">
-                © 2024 技术博客. 保留所有权利.
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+              <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">${post.content}</p>
+              <p class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mt-6">
+                这里是文章的详细内容。在实际应用中，这里会包含完整的文章内容，包括代码示例、图片、链接等。
+                通过这种方式，我们可以为读者提供更加丰富和深入的阅读体验。
               </p>
             </div>
-          </div>
-        </footer>
-      );
+            <div class="mt-8">
+              <a href="#/posts" class="text-primary hover:underline">← 返回文章列表</a>
+            </div>
+          `;
+        }
+      }
 
-      // 主应用组件
-      const App = () => (
-        <Router>
-          <div className="min-h-screen flex flex-col">
-            <Navbar />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/posts" element={<AllPostsPage />} />
-                <Route path="/posts/:id" element={<PostDetailPage />} />
-                <Route path="/tags" element={<TagsPage />} />
-                <Route path="/about" element={<AboutPage />} />
-              </Routes>
-            </main>
-            <Footer />
+      // 渲染文章卡片
+      function createPostCard(post) {
+        return `
+          <div class="bg-white dark:bg-dark rounded-lg shadow-lg overflow-hidden card-hover">
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-gray-500 dark:text-gray-400">${post.date}</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">${post.readTime}</span>
+              </div>
+              <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-100">
+                ${post.title}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                ${post.excerpt}
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                ${post.tags.map(tag => `<span class="tag-hover bg-primary/10 text-primary px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-primary hover:text-white">${tag}</span>`).join('')}
+              </div>
+              <a href="#/posts/${post.id}" class="text-primary font-semibold hover:text-primary/80 transition-colors">
+                阅读更多 →
+              </a>
+            </div>
           </div>
-        </Router>
-      );
+        `;
+      }
 
-      // 渲染应用
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<App />);
+      // 初始化应用
+      document.addEventListener('DOMContentLoaded', () => {
+        const router = new Router();
+
+        // 渲染首页文章
+        const homePostsContainer = document.getElementById('home-posts');
+        if (homePostsContainer) {
+          homePostsContainer.innerHTML = posts.map(post => createPostCard(post)).join('');
+        }
+
+        // 渲染全部文章页面
+        const allPostsContainer = document.getElementById('all-posts');
+        if (allPostsContainer) {
+          allPostsContainer.innerHTML = posts.map(post => createPostCard(post)).join('');
+        }
+
+        // 渲染标签云
+        const tagsCloudContainer = document.getElementById('tags-cloud');
+        if (tagsCloudContainer) {
+          tagsCloudContainer.innerHTML = allTags.map(tag => 
+            `<span class="tag-hover bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-full text-lg font-semibold cursor-pointer hover:shadow-lg">${tag}</span>`
+          ).join('');
+        }
+
+        // 滚动效果
+        window.addEventListener('scroll', () => {
+          const navbar = document.getElementById('navbar');
+          if (window.scrollY > 50) {
+            navbar.classList.add('bg-white/95', 'dark:bg-dark/95', 'backdrop-blur-md', 'shadow-md');
+            navbar.classList.remove('bg-transparent');
+          } else {
+            navbar.classList.remove('bg-white/95', 'dark:bg-dark/95', 'backdrop-blur-md', 'shadow-md');
+            navbar.classList.add('bg-transparent');
+          }
+        });
+      });
     </script>
   </body>
 </html>
