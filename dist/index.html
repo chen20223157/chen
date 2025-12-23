@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测试开发技术博客 - 音视频测试与开发实践</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#2563eb',
+              secondary: '#7c3aed', 
+              accent: '#10b981',
+              dark: '#1e293b',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .gradient-bg {
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      }
+      .tag-hover {
+        transition: all 0.2s ease;
+      }
+      .tag-hover:hover {
+        transform: scale(1.05);
+      }
+    </style>
+    <script type="module" crossorigin src="/chen/assets/index-Bl31TlmE.js"></script>
+    <link rel="stylesheet" crossorigin href="/chen/assets/index-DuI1flUZ.css">
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div id="root"></div>
+  </body>
+</html>

@@ -14,10 +14,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ post, relatedPosts }) => {
   // 处理文章内容中的代码块，添加代码高亮
   useEffect(() => {
     if (contentRef.current) {
-      const codeBlocks = contentRef.current.querySelectorAll('pre code');
-      codeBlocks.forEach((block) => {
-        // 这里可以添加代码高亮逻辑，目前使用的是prism-react-renderer，所以在渲染时处理
-      });
+      // 这里可以添加代码高亮逻辑，目前使用的是prism-react-renderer，所以在渲染时处理
+      // 在需要时可以获取代码块：contentRef.current.querySelectorAll('pre code')
     }
   }, [post.content]);
 
