@@ -7,11 +7,11 @@ const Banner: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight animate-slide-up">
-            探索技术世界
-          </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            分享前端开发、技术趋势和编程经验
-          </p>
+          探索测试开发技术
+        </h1>
+        <p className="text-xl md:text-2xl text-white/90 mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          分享音视频测试、移动端开发和自动化测试经验
+        </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <Link 
               to="/posts" 
